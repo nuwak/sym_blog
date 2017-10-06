@@ -52,3 +52,10 @@ services:
         - '@form.factory'
         - '@Doctrine\ORM\EntityManagerInterface'
         - '@Symfony\Component\Routing\RouterInterface'
+
+    app.doctine.hash_password_listener:
+      class: AppBundle\Doctrine\HashPasswordListener
+      arguments:
+        - '@security.user_password_encoder.generic'
+      tags:
+        - {name: doctrine.event_subscriber}

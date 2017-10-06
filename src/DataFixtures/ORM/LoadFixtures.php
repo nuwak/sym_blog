@@ -1,5 +1,6 @@
 <?php
 namespace AppBundle\DataFixtures\ORM;
+
 use AppBundle\Entity\Category;
 use AppBundle\Entity\User;
 use Doctrine\Common\DataFixtures\FixtureInterface;
@@ -12,7 +13,7 @@ class LoadFixtures extends Fixture
 {
     public function cat(ObjectManager $manager)
     {
-        for($i = 0; $i<10; $i++) {
+        for ($i = 0; $i<10; $i++) {
             $category = new Category();
             $category->setName('Octopus' . rand(1, 100));
             $category->setDescription('Octopodinae');
@@ -22,10 +23,12 @@ class LoadFixtures extends Fixture
         }
     }
 
-    public function load(ObjectManager $manager){
-        for($i = 0; $i<10; $i++) {
+    public function load(ObjectManager $manager)
+    {
+        for ($i = 0; $i<10; $i++) {
             $user = new User();
             $user->setEmail('mail-' . rand(1, 100) . '@gmail.com');
+            $user->setPlainPassword('123');
             $manager->persist($user);
             $manager->flush();
         }

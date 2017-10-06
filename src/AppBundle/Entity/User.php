@@ -42,8 +42,6 @@ class User implements UserInterface
 
     /**
      * A non-persisted field that's used to create the encoded password.
-     *
-     * @ORM\Column(type="string")
      */
     private $plainPassword;
 
