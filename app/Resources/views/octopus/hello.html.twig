@@ -3,4 +3,8 @@
 
 {% block body %}
     hello {{ name }} it is octopus view.
+<p>
+    {{ app.user ? app.user.email : 'Aquanauts' }}!
+</p>
+
 {% endblock %}

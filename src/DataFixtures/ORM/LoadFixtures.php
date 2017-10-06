@@ -29,6 +29,7 @@ class LoadFixtures extends Fixture
             $user = new User();
             $user->setEmail('mail-' . rand(1, 100) . '@gmail.com');
             $user->setPlainPassword('123');
+            $user->setRoles(['ROLE_ADMIN']);
             $manager->persist($user);
             $manager->flush();
         }

@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,10 +19,15 @@ class OctopusController extends Controller
     /**
      * @Route("octopus/{name}")
      * @param $name
+     * @Security("is_granted('ROLE_USER')")
      * @return Response
      */
     public function helloAction($name)
     {
+        $this->addFlash(
+            'success',
+            sprintf('Genus created by you: %s!', $this->getUser()->getEmail())
+        );
         return $this->render('octopus/hello.html.twig', ['name' => $name]);
     }
 
