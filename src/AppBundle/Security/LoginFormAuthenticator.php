@@ -8,7 +8,6 @@
 
 namespace AppBundle\Security;
 
-
 use AppBundle\Form\LoginForm;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -16,7 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
@@ -40,15 +39,28 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @var FormFactoryInterface
      */
     private $formFactory;
+    /**
+     * @var UserPasswordEncoder
+     */
+    private $passwordEncoder;
 
     /**
      * LoginFormAuthenticator constructor.
+     * @param FormFactoryInterface $formFactory
+     * @param EntityManager $em
+     * @param RouterInterface $router
+     * @param UserPasswordEncoder $passwordEncoder
      */
-    public function __construct(FormFactoryInterface $formFactory, EntityManager $em, RouterInterface $router)
-    {
+    public function __construct(
+        FormFactoryInterface $formFactory,
+        EntityManager $em,
+        RouterInterface $router,
+        UserPasswordEncoder $passwordEncoder
+    ) {
         $this->formFactory = $formFactory;
         $this->em = $em;
         $this->router = $router;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
 
@@ -58,7 +70,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        if('security_login' === $request->attributes->get('_route') && $request->isMethod('POST')){
+        if ('security_login' === $request->attributes->get('_route') && $request->isMethod('POST')) {
             $form = $this->formFactory->create(LoginForm::class);
             $form->handleRequest($request);
             $data = $form->getData();
@@ -66,7 +78,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             return $data;
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -91,7 +103,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         $password = $credentials['_password'];
 
-        if($password == '123'){
+        if ($this->passwordEncoder->isPasswordValid($user, $password)) {
             return true;
         }
 
@@ -125,6 +137,4 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
         return new RedirectResponse($targetPath);
     }
-
-
 }
