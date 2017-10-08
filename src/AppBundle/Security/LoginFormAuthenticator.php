@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: igor
- * Date: 13.09.17
- * Time: 13:44
- */
 
 namespace AppBundle\Security;
 
@@ -21,6 +15,11 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
+/**
+ * Class LoginFormAuthenticator
+ *
+ * @package AppBundle\Security
+ */
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
@@ -56,7 +55,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         EntityManager $em,
         RouterInterface $router,
         UserPasswordEncoder $passwordEncoder
-    ) {
+    ){
         $this->formFactory = $formFactory;
         $this->em = $em;
         $this->router = $router;
@@ -70,7 +69,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        if ('security_login' === $request->attributes->get('_route') && $request->isMethod('POST')) {
+        if ('security_login' === $request->attributes->get('_route')
+            && $request->isMethod('POST')
+        ) {
             $form = $this->formFactory->create(LoginForm::class);
             $form->handleRequest($request);
             $data = $form->getData();
