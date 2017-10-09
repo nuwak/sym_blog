@@ -62,7 +62,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPlainPassword()
     {
